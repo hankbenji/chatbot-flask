@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+</head>
+
+<body>
+    <h1>Chat with the AI Bot</h1>
+    <input type="text" id="userInput" placeholder="Type a message">
+    <button onclick="sendMessage()">Send</button>
+    <div id="chatbox"></div>
+
+    <script>
+        // JavaScript code for sending the message to the Flask server
+        async function sendMessage() {
+            const userInput = document.getElementById('userInput').value;
+            const response = await fetch('http://127.0.0.1:5000/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: userInput })
+            });
+
+            // Receive the response from the Flask server and update the chatbox
+            const data = await response.json();
+            document.getElementById('chatbox').innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
+            document.getElementById('chatbox').innerHTML += `<p><strong>Bot:</strong> ${data.response}</p>`;
+            document.getElementById('userInput').value = ''; // Clear the input field
+        }
+    </script>
+</body>
+
+</html>
